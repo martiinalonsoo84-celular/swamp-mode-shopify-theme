@@ -1,17 +1,18 @@
 {% comment %}
-  Swamp Mode — Collection Grid Section
-  Visual grid of main collections with hover zoom and title overlay.
-  
+  Swamp Mode — Home Collections Section
+  Grid visual de colecciones principales en homepage con hover zoom y overlay.
+  Renombrado de collection-grid.liquid para mayor claridad semántica.
+
   PLACEHOLDER MODE: Static collection data until Shopify is active.
 {% endcomment %}
 
-<section class="collection-grid section-padding" id="collection-grid">
+<section class="home-collections section-padding" id="home-collections">
   <div class="section-header">
     <h2>Colec<span class="accent-text">ciones</span></h2>
     <p>Explora nuestras categorías</p>
   </div>
 
-  <div class="collection-grid__grid">
+  <div class="home-collections__grid">
     {% comment %} PLACEHOLDER: Replace with collection loop when store is active {% endcomment %}
     
     <a href="#" class="collection-card collection-card--tall" id="collection-hoodies">
@@ -89,7 +90,7 @@
 </section>
 
 {% stylesheet %}
-  .collection-grid__grid {
+  .home-collections__grid {
     display: grid;
     grid-template-columns: 1fr;
     gap: var(--space-md);
@@ -170,7 +171,7 @@
 
   /* ── Desktop: 2x2 bento grid ── */
   @media (min-width: 768px) {
-    .collection-grid__grid {
+    .home-collections__grid {
       grid-template-columns: 1fr 1fr;
       gap: var(--space-lg);
     }
@@ -192,11 +193,11 @@
 
 {% schema %}
 {
-  "name": "Collection Grid",
+  "name": "Home Collections",
   "settings": [],
   "presets": [
     {
-      "name": "Collection Grid",
+      "name": "Home Collections",
       "category": "Swamp Mode"
     }
   ]

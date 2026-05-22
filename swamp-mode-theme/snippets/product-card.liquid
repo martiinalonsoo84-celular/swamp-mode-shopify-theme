@@ -1,0 +1,137 @@
+{% comment %}
+  Swamp Mode — Product Card Snippet
+  Reutilizable en: featured-products, collection page, search results.
+
+  Parámetros:
+    - card_url        {String}  URL del producto. Placeholder: '#'
+    - card_image_src  {String}  URL de la imagen (asset_url o product.featured_image)
+    - card_image_alt  {String}  Alt text de la imagen
+    - card_image_id   {String}  ID único para el elemento (ej: 'product-card-1')
+    - card_title      {String}  Nombre del producto
+    - card_price      {String}  Precio formateado (ej: '$34.990 CLP' o money filter)
+    - card_badge      {String}  Texto del badge. Si está vacío, no se muestra
+    - card_badge_type {String}  'accent' (verde) o 'danger' (rojo). Default: 'accent'
+    - card_cta        {String}  Texto del botón overlay. Default: 'Ver Producto'
+    - card_cta_style  {String}  'primary' o 'secondary'. Default: 'primary'
+
+  PLACEHOLDER MODE: Los valores se pasan hardcodeados desde la sección padre.
+  Cuando la tienda esté activa, reemplazar con datos del objeto `product` de Shopify.
+{% endcomment %}
+
+{%- liquid
+  assign _badge_type = card_badge_type | default: 'accent'
+  assign _cta        = card_cta | default: 'Ver Producto'
+  assign _cta_style  = card_cta_style | default: 'primary'
+  assign _url        = card_url | default: '#'
+-%}
+
+<a href="{{ _url }}" class="product-card" {% if card_image_id %}id="{{ card_image_id }}"{% endif %}>
+  <div class="product-card__image-wrap">
+    <img
+      src="{{ card_image_src }}"
+      alt="{{ card_image_alt | escape }}"
+      class="product-card__image"
+      loading="lazy"
+      width="400"
+      height="400"
+    >
+
+    {% comment %} Badge opcional — solo se renderiza si card_badge tiene valor {% endcomment %}
+    {%- if card_badge != blank -%}
+      <span class="badge badge-{{ _badge_type }} product-card__badge">{{ card_badge }}</span>
+    {%- endif -%}
+
+    <div class="product-card__overlay">
+      <span class="btn btn-sm btn-{{ _cta_style }}">{{ _cta }}</span>
+    </div>
+  </div>
+
+  <div class="product-card__info">
+    <h3 class="product-card__title">{{ card_title }}</h3>
+    <p class="product-card__price">{{ card_price }}</p>
+  </div>
+</a>
+
+{% stylesheet %}
+  /* ── Product Card ── */
+  .product-card {
+    display: block;
+    text-decoration: none;
+    color: var(--color-foreground);
+    transition: var(--transition-base);
+  }
+
+  .product-card:hover {
+    color: var(--color-foreground);
+  }
+
+  .product-card__image-wrap {
+    position: relative;
+    overflow: hidden;
+    background-color: var(--color-surface);
+    aspect-ratio: 1 / 1;
+  }
+
+  .product-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s var(--ease-out);
+  }
+
+  .product-card:hover .product-card__image {
+    transform: scale(1.05);
+  }
+
+  .product-card__badge {
+    position: absolute;
+    top: var(--space-sm);
+    left: var(--space-sm);
+    z-index: 2;
+  }
+
+  .product-card__overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(10, 10, 10, 0.6);
+    opacity: 0;
+    transition: var(--transition-base);
+    z-index: 1;
+  }
+
+  .product-card:hover .product-card__overlay {
+    opacity: 1;
+  }
+
+  .product-card__info {
+    padding: var(--space-md) var(--space-xs) 0;
+  }
+
+  .product-card__title {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--color-foreground);
+    margin-bottom: var(--space-xs);
+    line-height: 1.3;
+  }
+
+  .product-card__price {
+    font-family: var(--font-heading);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-accent);
+    letter-spacing: 0.02em;
+  }
+
+  @media (min-width: 768px) {
+    .product-card__title {
+      font-size: 0.95rem;
+    }
+  }
+{% endstylesheet %}

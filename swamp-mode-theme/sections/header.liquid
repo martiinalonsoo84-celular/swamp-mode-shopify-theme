@@ -54,7 +54,7 @@
           <path d="M16 10a4 4 0 01-8 0"/>
         </svg>
         {% comment %} PLACEHOLDER: Replace with {{ cart.item_count }} check {% endcomment %}
-        <span class="header__cart-count" id="cart-count">2</span>
+        <span class="header__cart-count is-hidden" id="cart-count">0</span>
       </a>
     </div>
   </div>
@@ -237,23 +237,46 @@
 
   /* Cart count badge */
   .header__cart-count {
-    position: absolute;
-    top: 2px;
-    right: 2px;
-    min-width: 16px;
-    height: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--color-accent);
-    color: var(--color-bg);
-    font-family: var(--font-body);
-    font-size: 0.6rem;
-    font-weight: 700;
-    border-radius: var(--radius-full);
-    line-height: 1;
-    padding: 0 4px;
-  }
+
+  position: absolute;
+
+  top: 2px;
+
+  right: 2px;
+
+  min-width: 16px;
+
+  height: 16px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background-color: var(--color-accent);
+
+  color: var(--color-bg);
+
+  font-family: var(--font-body);
+
+  font-size: 0.6rem;
+
+  font-weight: 700;
+
+  border-radius: var(--radius-full);
+
+  line-height: 1;
+
+  padding: 0 4px;
+
+}
+
+.header__cart-count.is-hidden {
+
+  display: none;
+
+}
 
   /* ── Body offset for fixed header ── */
   body {

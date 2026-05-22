@@ -1,8 +1,23 @@
 {% comment %}
   Swamp Mode — Featured Products Section
-  Horizontal scrollable grid of product cards (mobile) / 4-column grid (desktop).
-  
-  PLACEHOLDER MODE: Static products until Shopify collection is connected.
+  Grid de productos destacados usando el snippet reutilizable 'product-card'.
+  2 columnas mobile / 4 columnas desktop.
+
+  PLACEHOLDER MODE: Datos hardcodeados hasta que la tienda esté activa.
+  Cuando conectes Shopify:
+    - Reemplazar cada `render 'product-card'` con un loop sobre una colección:
+      {% for product in collections['featured'].products limit: 4 %}
+        {% render 'product-card',
+          card_url:        product.url,
+          card_image_src:  product.featured_image | image_url: width: 400,
+          card_image_alt:  product.featured_image.alt,
+          card_image_id:   forloop.index | prepend: 'product-card-',
+          card_title:      product.title,
+          card_price:      product.price | money,
+          card_badge:      product.tags contains 'new' | ternary: 'Nuevo', '',
+          card_badge_type: 'accent'
+        %}
+      {% endfor %}
 {% endcomment %}
 
 <section class="featured-products section-padding" id="featured-products">
@@ -13,93 +28,50 @@
 
   <div class="featured-products__grid">
     {% comment %} PLACEHOLDER: Replace with collection product loop {% endcomment %}
-    
-    {% comment %} Product 1 {% endcomment %}
-    <a href="#" class="product-card" id="product-card-1">
-      <div class="product-card__image-wrap">
-        <img
-          src="{{ 'placeholder-hoodie.png' | asset_url }}"
-          alt="Hoodie Swamp Oversize"
-          class="product-card__image"
-          loading="lazy"
-          width="400"
-          height="400"
-        >
-        <span class="badge badge-accent product-card__badge">Nuevo</span>
-        <div class="product-card__overlay">
-          <span class="btn btn-sm btn-primary">Ver Producto</span>
-        </div>
-      </div>
-      <div class="product-card__info">
-        <h3 class="product-card__title">Hoodie Swamp Oversize</h3>
-        <p class="product-card__price">$34.990 CLP</p>
-      </div>
-    </a>
 
-    {% comment %} Product 2 {% endcomment %}
-    <a href="#" class="product-card" id="product-card-2">
-      <div class="product-card__image-wrap">
-        <img
-          src="{{ 'placeholder-tee.png' | asset_url }}"
-          alt="Tee Graphic Swamp"
-          class="product-card__image"
-          loading="lazy"
-          width="400"
-          height="400"
-        >
-        <div class="product-card__overlay">
-          <span class="btn btn-sm btn-primary">Ver Producto</span>
-        </div>
-      </div>
-      <div class="product-card__info">
-        <h3 class="product-card__title">Tee Graphic Swamp</h3>
-        <p class="product-card__price">$19.990 CLP</p>
-      </div>
-    </a>
+    {% render 'product-card',
+      card_url:        '#',
+      card_image_src:  'placeholder-hoodie.png' | asset_url,
+      card_image_alt:  'Hoodie Swamp Oversize',
+      card_image_id:   'product-card-1',
+      card_title:      'Hoodie Swamp Oversize',
+      card_price:      '$34.990 CLP',
+      card_badge:      'Nuevo',
+      card_badge_type: 'accent'
+    %}
 
-    {% comment %} Product 3 {% endcomment %}
-    <a href="#" class="product-card" id="product-card-3">
-      <div class="product-card__image-wrap">
-        <img
-          src="{{ 'placeholder-hoodie.png' | asset_url }}"
-          alt="Hoodie Dark Edition"
-          class="product-card__image"
-          loading="lazy"
-          width="400"
-          height="400"
-        >
-        <span class="badge badge-danger product-card__badge">Agotado</span>
-        <div class="product-card__overlay">
-          <span class="btn btn-sm btn-secondary">Notificarme</span>
-        </div>
-      </div>
-      <div class="product-card__info">
-        <h3 class="product-card__title">Hoodie Dark Edition</h3>
-        <p class="product-card__price">$39.990 CLP</p>
-      </div>
-    </a>
+    {% render 'product-card',
+      card_url:        '#',
+      card_image_src:  'placeholder-tee.png' | asset_url,
+      card_image_alt:  'Tee Graphic Swamp',
+      card_image_id:   'product-card-2',
+      card_title:      'Tee Graphic Swamp',
+      card_price:      '$19.990 CLP'
+    %}
 
-    {% comment %} Product 4 {% endcomment %}
-    <a href="#" class="product-card" id="product-card-4">
-      <div class="product-card__image-wrap">
-        <img
-          src="{{ 'placeholder-tee.png' | asset_url }}"
-          alt="Tee Oversize Logo"
-          class="product-card__image"
-          loading="lazy"
-          width="400"
-          height="400"
-        >
-        <span class="badge badge-accent product-card__badge">Nuevo</span>
-        <div class="product-card__overlay">
-          <span class="btn btn-sm btn-primary">Ver Producto</span>
-        </div>
-      </div>
-      <div class="product-card__info">
-        <h3 class="product-card__title">Tee Oversize Logo</h3>
-        <p class="product-card__price">$22.990 CLP</p>
-      </div>
-    </a>
+    {% render 'product-card',
+      card_url:        '#',
+      card_image_src:  'placeholder-hoodie.png' | asset_url,
+      card_image_alt:  'Hoodie Dark Edition',
+      card_image_id:   'product-card-3',
+      card_title:      'Hoodie Dark Edition',
+      card_price:      '$39.990 CLP',
+      card_badge:      'Agotado',
+      card_badge_type: 'danger',
+      card_cta:        'Notificarme',
+      card_cta_style:  'secondary'
+    %}
+
+    {% render 'product-card',
+      card_url:        '#',
+      card_image_src:  'placeholder-tee.png' | asset_url,
+      card_image_alt:  'Tee Oversize Logo',
+      card_image_id:   'product-card-4',
+      card_title:      'Tee Oversize Logo',
+      card_price:      '$22.990 CLP',
+      card_badge:      'Nuevo',
+      card_badge_type: 'accent'
+    %}
   </div>
 
   <div class="featured-products__cta">
@@ -108,7 +80,6 @@
 </section>
 
 {% stylesheet %}
-  /* ── Product Grid ── */
   .featured-products__grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -120,91 +91,10 @@
     margin-top: var(--space-2xl);
   }
 
-  /* ── Product Card ── */
-  .product-card {
-    display: block;
-    text-decoration: none;
-    color: var(--color-foreground);
-    transition: var(--transition-base);
-  }
-
-  .product-card:hover {
-    color: var(--color-foreground);
-  }
-
-  .product-card__image-wrap {
-    position: relative;
-    overflow: hidden;
-    background-color: var(--color-surface);
-    aspect-ratio: 1 / 1;
-  }
-
-  .product-card__image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.5s var(--ease-out);
-  }
-
-  .product-card:hover .product-card__image {
-    transform: scale(1.05);
-  }
-
-  .product-card__badge {
-    position: absolute;
-    top: var(--space-sm);
-    left: var(--space-sm);
-    z-index: 2;
-  }
-
-  .product-card__overlay {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: rgba(10, 10, 10, 0.6);
-    opacity: 0;
-    transition: var(--transition-base);
-    z-index: 1;
-  }
-
-  .product-card:hover .product-card__overlay {
-    opacity: 1;
-  }
-
-  .product-card__info {
-    padding: var(--space-md) var(--space-xs) 0;
-  }
-
-  .product-card__title {
-    font-family: var(--font-body);
-    font-size: 0.85rem;
-    font-weight: 500;
-    text-transform: none;
-    letter-spacing: 0;
-    color: var(--color-foreground);
-    margin-bottom: var(--space-xs);
-    line-height: 1.3;
-  }
-
-  .product-card__price {
-    font-family: var(--font-heading);
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--color-accent);
-    letter-spacing: 0.02em;
-  }
-
-  /* ── Desktop ── */
   @media (min-width: 768px) {
     .featured-products__grid {
       grid-template-columns: repeat(4, 1fr);
       gap: var(--space-lg);
-    }
-
-    .product-card__title {
-      font-size: 0.95rem;
     }
   }
 {% endstylesheet %}
