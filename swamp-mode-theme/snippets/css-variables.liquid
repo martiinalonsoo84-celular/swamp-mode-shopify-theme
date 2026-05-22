@@ -1,18 +1,84 @@
 {% style %}
-  {% # Loads all font variantions with display: swap %}
+  {% # Loads all font variations with display: swap %}
   {{ settings.type_primary_font | font_face: font_display: 'swap' }}
   {{ settings.type_primary_font | font_modify: 'weight', 'bold' | font_face: font_display: 'swap' }}
   {{ settings.type_primary_font | font_modify: 'weight', 'bold' | font_modify: 'style', 'italic' | font_face: font_display: 'swap' }}
   {{ settings.type_primary_font | font_modify: 'style', 'italic' | font_face: font_display: 'swap' }}
 
   :root {
-    --font-primary--family: {{ settings.type_primary_font.family }}, {{ settings.type_primary_font.fallback_families }};
+    /* ── Typography ── */
+    --font-heading: 'Oswald', {{ settings.type_primary_font.family }}, sans-serif;
+    --font-body: 'Inter', {{ settings.type_primary_font.family }}, {{ settings.type_primary_font.fallback_families }};
+    --font-primary--family: var(--font-body);
     --font-primary--style: {{ settings.type_primary_font.style }};
     --font-primary--weight: {{ settings.type_primary_font.weight }};
+
+    /* ── Colors — Dark Mode Swamp Mode ── */
+    --color-bg: #0A0A0A;
+    --color-surface: #141414;
+    --color-surface-hover: #1A1A1A;
+    --color-surface-elevated: #1E1E1E;
+    --color-foreground: #F5F5F5;
+    --color-muted: #888888;
+    --color-muted-light: #AAAAAA;
+    --color-accent: #BFFF00;
+    --color-accent-hover: #A8E000;
+    --color-accent-muted: rgba(191, 255, 0, 0.15);
+    --color-danger: #FF4444;
+    --color-success: #00CC66;
+    --color-border: #222222;
+    --color-border-light: #333333;
+
+    /* ── Legacy compatibility (Skeleton) ── */
+    --color-background: var(--color-bg);
+
+    /* ── Layout ── */
     --page-width: {{ settings.max_page_width }};
     --page-margin: {{ settings.min_page_margin }}px;
-    --color-background: {{ settings.background_color }};
-    --color-foreground: {{ settings.foreground_color }};
-    --style-border-radius-inputs: {{ settings.input_corner_radius }}px;
+
+    /* ── Spacing Scale ── */
+    --space-xs: 0.25rem;
+    --space-sm: 0.5rem;
+    --space-md: 1rem;
+    --space-lg: 1.5rem;
+    --space-xl: 2rem;
+    --space-2xl: 3rem;
+    --space-3xl: 4rem;
+    --space-4xl: 6rem;
+    --space-5xl: 8rem;
+
+    /* ── Radius ── */
+    --radius-none: 0px;
+    --radius-sm: 2px;
+    --radius-md: 4px;
+    --radius-lg: 8px;
+    --radius-full: 9999px;
+    --style-border-radius-inputs: var(--radius-sm);
+
+    /* ── Transitions ── */
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+    --transition-fast: all 0.15s var(--ease-out);
+    --transition-base: all 0.3s var(--ease-out);
+    --transition-slow: all 0.5s var(--ease-out);
+    --transition-drawer: transform 0.4s var(--ease-out);
+
+    /* ── Shadows ── */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+    --shadow-glow: 0 0 20px rgba(191, 255, 0, 0.2);
+
+    /* ── Header ── */
+    --header-height: 4rem;
+    --header-height-desktop: 5rem;
+    --header-bg: rgba(10, 10, 10, 0.85);
+    --header-blur: blur(12px);
+
+    /* ── Z-index ── */
+    --z-header: 100;
+    --z-drawer: 200;
+    --z-overlay: 150;
+    --z-toast: 300;
   }
 {% endstyle %}

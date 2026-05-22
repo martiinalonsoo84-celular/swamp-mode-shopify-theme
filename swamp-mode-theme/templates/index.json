@@ -9,12 +9,32 @@
  */
 {
   "sections": {
-    "main": {
-      "type": "hello-world",
+    "hero": {
+      "type": "hero-banner",
+      "settings": {}
+    },
+    "featured": {
+      "type": "featured-products",
+      "settings": {}
+    },
+    "collections": {
+      "type": "collection-grid",
+      "settings": {}
+    },
+    "story": {
+      "type": "brand-story",
+      "settings": {}
+    },
+    "newsletter": {
+      "type": "newsletter-section",
       "settings": {}
     }
   },
   "order": [
-    "main"
+    "hero",
+    "featured",
+    "collections",
+    "story",
+    "newsletter"
   ]
 }

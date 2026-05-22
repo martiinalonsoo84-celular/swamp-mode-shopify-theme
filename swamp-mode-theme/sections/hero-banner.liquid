@@ -1,0 +1,159 @@
+{% comment %}
+  Swamp Mode — Hero Banner Section
+  Fullscreen hero with background image, overlay gradient, and dual CTAs.
+  
+  PLACEHOLDER MODE: Uses static image and copy until Shopify is active.
+{% endcomment %}
+
+<section class="hero full-width" id="hero-banner">
+  {% comment %} Background image {% endcomment %}
+  <div class="hero__bg">
+    <img
+      src="{{ 'hero-banner.png' | asset_url }}"
+      alt="Swamp Mode — Streetwear sin límites"
+      class="hero__bg-img"
+      loading="eager"
+      fetchpriority="high"
+      width="1920"
+      height="1080"
+    >
+  </div>
+
+  {% comment %} Overlay gradient {% endcomment %}
+  <div class="hero__overlay"></div>
+
+  {% comment %} Content {% endcomment %}
+  <div class="hero__content">
+    <span class="hero__tag animate-fade-in-up">Edición Limitada — Drop 001</span>
+    <h1 class="hero__title animate-fade-in-up delay-1">
+      SWAMP<br><span class="accent-text">MODE</span>
+    </h1>
+    <p class="hero__subtitle animate-fade-in-up delay-2">
+      Streetwear sin límites. Nacidos en el pantano, vestimos la calle.
+    </p>
+    <div class="hero__actions animate-fade-in-up delay-3">
+      <a href="#" class="btn btn-primary btn-lg">Comprar Ahora</a>
+      <a href="#" class="btn btn-secondary btn-lg">Ver Colección</a>
+    </div>
+  </div>
+
+  {% comment %} Scroll indicator {% endcomment %}
+  <div class="hero__scroll-indicator">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="6 9 12 15 18 9"/>
+    </svg>
+  </div>
+</section>
+
+{% stylesheet %}
+  .hero {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow: hidden;
+  }
+
+  .hero__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .hero__bg-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+  }
+
+  .hero__overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(
+      to bottom,
+      rgba(10, 10, 10, 0.3) 0%,
+      rgba(10, 10, 10, 0.6) 50%,
+      rgba(10, 10, 10, 0.95) 100%
+    );
+  }
+
+  .hero__content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: var(--space-xl) var(--page-margin);
+    max-width: 700px;
+  }
+
+  .hero__tag {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--color-accent);
+    margin-bottom: var(--space-lg);
+    padding: 0.4rem 1rem;
+    border: 1px solid var(--color-accent);
+    background-color: var(--color-accent-muted);
+  }
+
+  .hero__title {
+    font-size: clamp(3.5rem, 12vw, 8rem);
+    font-weight: 700;
+    line-height: 0.95;
+    letter-spacing: 0.04em;
+    margin-bottom: var(--space-lg);
+  }
+
+  .hero__subtitle {
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
+    color: var(--color-muted-light);
+    max-width: 45ch;
+    margin: 0 auto var(--space-2xl);
+    line-height: 1.6;
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    align-items: center;
+  }
+
+  .hero__scroll-indicator {
+    position: absolute;
+    bottom: var(--space-xl);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    color: var(--color-muted);
+    animation: bounce 2s infinite;
+    opacity: 0.5;
+  }
+
+  @media (min-width: 768px) {
+    .hero__actions {
+      flex-direction: row;
+      justify-content: center;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Hero Banner",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Hero Banner",
+      "category": "Swamp Mode"
+    }
+  ]
+}
+{% endschema %}

@@ -1,65 +1,292 @@
-<header>
-  <h2 class="header__title">
-    {{ shop.name | link_to: routes.root_url }}
-  </h2>
+{% comment %}
+  Swamp Mode — Header Section
+  Mobile-first sticky header with hamburger drawer navigation.
+  
+  PLACEHOLDER MODE: Static links used until Shopify store is active.
+  Replace hardcoded links with Liquid tags when connecting to store.
+{% endcomment %}
 
-  <div class="header__menu">
-    {% for link in section.settings.menu.links %}
-      {{ link.title | link_to: link.url }}
-    {% endfor %}
-  </div>
+<header class="header" id="site-header" data-sticky-header>
+  <div class="header__inner">
+    {% comment %} Mobile: Hamburger Button {% endcomment %}
+    <button
+      class="header__hamburger"
+      id="menu-toggle"
+      aria-label="Abrir menú"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+    >
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+    </button>
 
-  <div class="header__icons">
-    {% if shop.customer_accounts_enabled %}
-      <shopify-account menu="{{ section.settings.customer_account_menu }}">
-        {{ 'icon-account.svg' | inline_asset_content }}
-      </shopify-account>
-    {% endif %}
-
-    <a href="{{ routes.cart_url }}">
-      {% if cart.item_count > 0 %}
-        <sup>{{ cart.item_count }}</sup>
-      {% endif %}
-
-      {{ 'icon-cart.svg' | inline_asset_content }}
+    {% comment %} Logo {% endcomment %}
+    <a href="{{ routes.root_url | default: '#' }}" class="header__logo" aria-label="Swamp Mode — Inicio">
+      {% comment %} PLACEHOLDER: Replace with SVG/PNG logo when available {% endcomment %}
+      <span class="header__logo-text">SWAMP<span class="header__logo-accent">MODE</span></span>
     </a>
+
+    {% comment %} Desktop Navigation {% endcomment %}
+    <nav class="header__nav" aria-label="Navegación principal">
+      {% comment %} PLACEHOLDER: Replace with section.settings.menu.links loop {% endcomment %}
+      <a href="#" class="header__nav-link">Hoodies</a>
+      <a href="#" class="header__nav-link">Tees</a>
+      <a href="#" class="header__nav-link">Pants</a>
+      <a href="#" class="header__nav-link">Accesorios</a>
+      <a href="#" class="header__nav-link header__nav-link--sale">Sale</a>
+    </nav>
+
+    {% comment %} Icons: Search + Cart {% endcomment %}
+    <div class="header__icons">
+      <button class="header__icon-btn" aria-label="Buscar">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+      </button>
+
+      {% comment %} PLACEHOLDER: Replace href with {{ routes.cart_url }} {% endcomment %}
+      <a href="#cart" class="header__icon-btn header__cart-btn" aria-label="Carrito de compras">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 01-8 0"/>
+        </svg>
+        {% comment %} PLACEHOLDER: Replace with {{ cart.item_count }} check {% endcomment %}
+        <span class="header__cart-count" id="cart-count">2</span>
+      </a>
+    </div>
   </div>
 </header>
 
+{% comment %} Mobile Menu Drawer {% endcomment %}
+{% render 'mobile-menu' %}
+
+{% comment %} Header JavaScript: sticky, menu toggle, accessibility {% endcomment %}
+<script src="{{ 'header.js' | asset_url }}" defer></script>
+
 {% stylesheet %}
-  header {
-    height: 5rem;
+  /* ── Header Base ── */
+  .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: var(--z-header);
+    height: var(--header-height);
+    background-color: var(--header-bg);
+    backdrop-filter: var(--header-blur);
+    -webkit-backdrop-filter: var(--header-blur);
+    border-bottom: 1px solid transparent;
+    transition: var(--transition-base);
+  }
+
+  .header.is-scrolled {
+    border-bottom-color: var(--color-border);
+    box-shadow: var(--shadow-md);
+  }
+
+  .header__inner {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    height: 100%;
+    max-width: var(--page-width);
+    margin: 0 auto;
+    padding: 0 var(--page-margin);
   }
-  header a {
-    position: relative;
+
+  /* ── Hamburger ── */
+  .header__hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: calc(var(--z-drawer) + 1);
+  }
+
+  .hamburger-line {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background-color: var(--color-foreground);
+    transition: var(--transition-base);
+    transform-origin: center;
+  }
+
+  /* Hamburger → X animation */
+  .header__hamburger[aria-expanded="true"] .hamburger-line:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+  .header__hamburger[aria-expanded="true"] .hamburger-line:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  .header__hamburger[aria-expanded="true"] .hamburger-line:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  /* ── Logo ── */
+  .header__logo {
+    display: flex;
+    align-items: center;
     text-decoration: none;
+  }
+
+  .header__logo:hover {
     color: var(--color-foreground);
+  }
+
+  .header__logo-text {
+    font-family: var(--font-heading);
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--color-foreground);
+    line-height: 1;
+  }
+
+  .header__logo-accent {
+    color: var(--color-accent);
+    margin-left: 0.15em;
+  }
+
+  /* ── Desktop Navigation ── */
+  .header__nav {
+    display: none;
+    align-items: center;
+    gap: var(--space-xl);
+  }
+
+  .header__nav-link {
+    font-family: var(--font-heading);
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-muted-light);
+    text-decoration: none;
+    position: relative;
+    padding: 0.25rem 0;
+  }
+
+  .header__nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--color-accent);
+    transition: var(--transition-base);
+  }
+
+  .header__nav-link:hover {
+    color: var(--color-foreground);
+  }
+
+  .header__nav-link:hover::after {
+    width: 100%;
+  }
+
+  .header__nav-link--sale {
+    color: var(--color-accent);
+  }
+
+  .header__nav-link--sale:hover {
+    color: var(--color-accent-hover);
+  }
+
+  /* ── Icons ── */
+  .header__icons {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+
+  .header__icon-btn {
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    background: none;
+    border: none;
+    color: var(--color-foreground);
+    cursor: pointer;
+    transition: var(--transition-fast);
+    position: relative;
+    text-decoration: none;
   }
-  header a sup {
+
+  .header__icon-btn:hover {
+    color: var(--color-accent);
+  }
+
+  .header__icon-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* Cart count badge */
+  .header__cart-count {
     position: absolute;
-    left: 100%;
-    overflow: hidden;
-    max-width: var(--page-margin);
-  }
-  header svg {
-    width: 2rem;
-  }
-  header .header__menu,
-  header .header__icons {
+    top: 2px;
+    right: 2px;
+    min-width: 16px;
+    height: 16px;
     display: flex;
-    gap: 1rem;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-accent);
+    color: var(--color-bg);
+    font-family: var(--font-body);
+    font-size: 0.6rem;
+    font-weight: 700;
+    border-radius: var(--radius-full);
+    line-height: 1;
+    padding: 0 4px;
+  }
+
+  /* ── Body offset for fixed header ── */
+  body {
+    padding-top: var(--header-height);
+  }
+
+  /* ── Desktop breakpoint ── */
+  @media (min-width: 768px) {
+    .header {
+      height: var(--header-height-desktop);
+    }
+
+    .header__hamburger {
+      display: none;
+    }
+
+    .header__nav {
+      display: flex;
+    }
+
+    .header__logo-text {
+      font-size: 1.5rem;
+    }
+
+    body {
+      padding-top: var(--header-height-desktop);
+    }
   }
 {% endstylesheet %}
 
 {% schema %}
 {
-  "name": "t:general.header",
+  "name": "Swamp Mode Header",
   "settings": [
     {
       "type": "link_list",

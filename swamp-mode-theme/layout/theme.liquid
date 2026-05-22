@@ -1,18 +1,25 @@
 <!doctype html>
-<html lang="{{ request.locale.iso_code }}">
+<html lang="{{ request.locale.iso_code }}" data-theme="dark">
   <head>
     {% # Inlined CSS Variables %}
     {% render 'css-variables' %}
 
     {% comment %}
-      Font preloading:
+      Google Fonts: Oswald (headings) + Inter (body)
+      Preconnect for faster loading, then load the font stylesheets.
+    {% endcomment %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    {% comment %}
+      Shopify font preloading (if a non-system font is selected in theme settings):
       1. Preconnect to font CDN for faster connection
       2. Preload only the critical font variant (base weight)
       3. Additional variants load on-demand via @font-face
     {% endcomment %}
     {% unless settings.type_primary_font.system? %}
       <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
-
       {% comment %} Preload the base font variant for initial page render {% endcomment %}
       {{ settings.type_primary_font | font_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
     {% endunless %}
@@ -23,13 +30,18 @@
     {% # Social, title, etc. %}
     {% render 'meta-tags' %}
 
+    {% comment %} Favicon — placeholder until brand asset is provided {% endcomment %}
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230A0A0A'/><text y='70' x='15' font-size='60' fill='%23BFFF00' font-family='sans-serif' font-weight='bold'>S</text></svg>">
+
     {{ content_for_header }}
   </head>
 
   <body>
     {% sections 'header-group' %}
 
-    {{ content_for_layout }}
+    <main id="main-content">
+      {{ content_for_layout }}
+    </main>
 
     {% sections 'footer-group' %}
   </body>

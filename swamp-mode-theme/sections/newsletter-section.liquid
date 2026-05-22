@@ -1,0 +1,50 @@
+{% comment %}
+  Swamp Mode — Newsletter Section
+  PLACEHOLDER MODE: Static form until Shopify is active.
+{% endcomment %}
+
+<section class="newsletter full-width section-padding" id="newsletter">
+  <div class="newsletter__inner">
+    <h2 class="newsletter__title">Entra al <span class="accent-text">Swamp</span></h2>
+    <p class="newsletter__desc">Recibe drops exclusivos, descuentos y contenido antes que nadie.</p>
+    <form class="newsletter__form" onsubmit="event.preventDefault();">
+      <input type="email" class="newsletter__input" placeholder="tu@email.com" aria-label="Email" required>
+      <button type="submit" class="btn btn-primary newsletter__btn">Suscribirme</button>
+    </form>
+    <p class="newsletter__note">Sin spam. Solo lo bueno. Puedes salir cuando quieras.</p>
+  </div>
+</section>
+
+{% stylesheet %}
+  .newsletter {
+    background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-bg) 50%, var(--color-surface) 100%);
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+    text-align: center;
+  }
+  .newsletter__inner { max-width: 550px; margin: 0 auto; padding: 0 var(--page-margin); }
+  .newsletter__title { margin-bottom: var(--space-md); }
+  .newsletter__desc { color: var(--color-muted-light); font-size: 1rem; margin-bottom: var(--space-xl); line-height: 1.6; }
+  .newsletter__form { display: flex; flex-direction: column; gap: var(--space-md); }
+  .newsletter__input {
+    width: 100%; padding: 1rem 1.25rem; background: var(--color-surface); border: 1px solid var(--color-border);
+    color: var(--color-foreground); font-size: 0.95rem; outline: none; transition: var(--transition-fast);
+  }
+  .newsletter__input:focus { border-color: var(--color-accent); }
+  .newsletter__input::placeholder { color: var(--color-muted); }
+  .newsletter__btn { width: 100%; }
+  .newsletter__note { margin-top: var(--space-md); font-size: 0.75rem; color: var(--color-muted); }
+  @media (min-width: 768px) {
+    .newsletter__form { flex-direction: row; }
+    .newsletter__input { flex: 1; }
+    .newsletter__btn { width: auto; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Newsletter",
+  "settings": [],
+  "presets": [{ "name": "Newsletter", "category": "Swamp Mode" }]
+}
+{% endschema %}

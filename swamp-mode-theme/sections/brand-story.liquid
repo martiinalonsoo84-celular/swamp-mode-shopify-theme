@@ -1,0 +1,44 @@
+{% comment %}
+  Swamp Mode — Brand Story Section
+  PLACEHOLDER MODE: Static content until Shopify is active.
+{% endcomment %}
+
+<section class="brand-story section-padding" id="brand-story">
+  <div class="brand-story__grid">
+    <div class="brand-story__image-wrap">
+      <img src="{{ 'brand-story.png' | asset_url }}" alt="Swamp Mode" class="brand-story__image" loading="lazy" width="800" height="600">
+      <div class="brand-story__accent-line"></div>
+    </div>
+    <div class="brand-story__text">
+      <span class="brand-story__eyebrow">Nuestra Historia</span>
+      <h2>Nacidos en el <span class="accent-text">Pantano</span></h2>
+      <p class="brand-story__desc">Swamp Mode nació de la calle, del barro, de las noches largas y la actitud que no se compra. No somos una marca más — somos un movimiento.</p>
+      <p class="brand-story__desc">Diseñamos desde Chile para el mundo. Ediciones limitadas que no se repiten. Si llegaste tarde, llegaste tarde.</p>
+      <a href="#" class="btn btn-secondary">Conocer Más →</a>
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .brand-story { background-color: var(--color-surface); }
+  .brand-story__grid { display: grid; grid-template-columns: 1fr; gap: var(--space-2xl); align-items: center; }
+  .brand-story__image-wrap { position: relative; overflow: hidden; }
+  .brand-story__image { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 4 / 3; }
+  .brand-story__accent-line { position: absolute; bottom: 0; left: 0; width: 60%; height: 3px; background: linear-gradient(to right, var(--color-accent), transparent); }
+  .brand-story__text { padding: 0 var(--space-md); }
+  .brand-story__eyebrow { display: inline-block; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.2em; color: var(--color-accent); margin-bottom: var(--space-md); }
+  .brand-story__desc { color: var(--color-muted-light); font-size: 0.95rem; line-height: 1.7; margin-bottom: var(--space-lg); max-width: 50ch; }
+  @media (min-width: 768px) {
+    .brand-story__grid { grid-template-columns: 1fr 1fr; gap: var(--space-4xl); }
+    .brand-story__image { aspect-ratio: 3 / 4; }
+    .brand-story__text { padding: var(--space-2xl) 0; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Brand Story",
+  "settings": [],
+  "presets": [{ "name": "Brand Story", "category": "Swamp Mode" }]
+}
+{% endschema %}
