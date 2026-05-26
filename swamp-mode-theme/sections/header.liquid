@@ -1,90 +1,118 @@
 {% comment %}
   Swamp Mode — Header Section
-  Mobile-first sticky header with hamburger drawer navigation.
-  
-  PLACEHOLDER MODE: Static links used until Shopify store is active.
-  Replace hardcoded links with Liquid tags when connecting to store.
+  Sticky header with logo, desktop nav, and icon actions.
+  Mobile: hamburger opens drawer from mobile-menu.liquid snippet.
 {% endcomment %}
 
 <header class="header" id="site-header" data-sticky-header>
   <div class="header__inner">
-    {% comment %} Mobile: Hamburger Button {% endcomment %}
+
+    {%- comment -%} Mobile: Hamburger button (left) {%- endcomment -%}
     <button
-      class="header__hamburger"
-      id="menu-toggle"
+      class="header__icon header__menu-toggle"
+      id="mobile-menu-toggle"
       aria-label="Abrir menú"
       aria-expanded="false"
       aria-controls="mobile-menu"
     >
-      <span class="hamburger-line"></span>
-      <span class="hamburger-line"></span>
-      <span class="hamburger-line"></span>
+      <span class="header__hamburger" id="hamburger-icon">
+        <span></span>
+        <span></span>
+        <span></span>
+      </span>
     </button>
 
-    {% comment %} Logo {% endcomment %}
-    <a href="{{ routes.root_url | default: '#' }}" class="header__logo" aria-label="Swamp Mode — Inicio">
-      {% comment %} PLACEHOLDER: Replace with SVG/PNG logo when available {% endcomment %}
-      <span class="header__logo-text">SWAMP<span class="header__logo-accent">MODE</span></span>
+    {%- comment -%} Logo {%- endcomment -%}
+    <a href="{{ routes.root_url }}" class="header__logo" aria-label="{{ shop.name }}">
+      {%- comment -%}
+        PLACEHOLDER: Typographic logo.
+        Replace with {% if section.settings.logo %} image block when logo is ready.
+      {%- endcomment -%}
+      <span class="header__logo-text">SWAMP MODE</span>
     </a>
 
-    {% comment %} Desktop Navigation {% endcomment %}
+    {%- comment -%} Desktop Navigation {%- endcomment -%}
     <nav class="header__nav" aria-label="Navegación principal">
-      {% comment %} PLACEHOLDER: Replace with section.settings.menu.links loop {% endcomment %}
-      <a href="#" class="header__nav-link">Hoodies</a>
-      <a href="#" class="header__nav-link">Tees</a>
-      <a href="#" class="header__nav-link">Pants</a>
-      <a href="#" class="header__nav-link">Accesorios</a>
-      <a href="#" class="header__nav-link header__nav-link--sale">Sale</a>
+      {%- comment -%} PLACEHOLDER: Static links until Shopify menus are configured {%- endcomment -%}
+      {% if section.settings.menu != blank %}
+        {% for link in section.settings.menu.links %}
+          <a href="{{ link.url }}" class="header__nav-link {% if link.active %}is-active{% endif %}">
+            {{ link.title }}
+          </a>
+        {% endfor %}
+      {% else %}
+        <a href="{{ routes.root_url }}" class="header__nav-link">Inicio</a>
+        <a href="{{ routes.collections_url }}" class="header__nav-link">Drops</a>
+        <a href="{{ routes.collections_url }}/poleras" class="header__nav-link">Poleras</a>
+        <a href="{{ routes.collections_url }}/hoodies" class="header__nav-link">Hoodies</a>
+        <a href="/pages/nosotros" class="header__nav-link">Nosotros</a>
+      {% endif %}
     </nav>
 
-    {% comment %} Icons: Search + Cart {% endcomment %}
-    <div class="header__icons">
-      <button class="header__icon-btn" aria-label="Buscar">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="11" cy="11" r="8"/>
-          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+    {%- comment -%} Action Icons {%- endcomment -%}
+    <div class="header__actions">
+      <a href="{{ routes.search_url }}" class="header__icon" aria-label="Buscar">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="9" cy="9" r="5.5" stroke="currentColor" stroke-width="1.5"/>
+          <line x1="13.5" y1="13.5" x2="17" y2="17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
         </svg>
-      </button>
+      </a>
 
-      {% comment %} PLACEHOLDER: Replace href with {{ routes.cart_url }} {% endcomment %}
-      <a href="#cart" class="header__icon-btn header__cart-btn" aria-label="Carrito de compras">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
-          <line x1="3" y1="6" x2="21" y2="6"/>
-          <path d="M16 10a4 4 0 01-8 0"/>
-        </svg>
-        {% comment %} PLACEHOLDER: Replace with {{ cart.item_count }} check {% endcomment %}
-        <span class="header__cart-count is-hidden" id="cart-count">0</span>
+      {% if shop.customer_accounts_enabled %}
+        <a href="{{ routes.account_url }}" class="header__icon header__icon--account" aria-label="Mi cuenta">
+          {{ 'icon-account.svg' | inline_asset_content }}
+        </a>
+      {% endif %}
+
+      <a href="{{ routes.cart_url }}" class="header__icon header__icon--cart" id="header-cart-icon" aria-label="Carrito">
+        {{ 'icon-cart.svg' | inline_asset_content }}
+        {% if cart.item_count > 0 %}
+          <span class="header__cart-count" id="header-cart-count">{{ cart.item_count }}</span>
+        {% endif %}
       </a>
     </div>
+
   </div>
 </header>
 
-{% comment %} Mobile Menu Drawer {% endcomment %}
+{%- comment -%} Mobile Menu Drawer {%- endcomment -%}
 {% render 'mobile-menu' %}
 
-{% comment %} Header JavaScript: sticky, menu toggle, accessibility {% endcomment %}
-<script src="{{ 'header.js' | asset_url }}" defer></script>
-
 {% stylesheet %}
-  /* ── Header Base ── */
+  /* ═══════════════════════════════════════
+     Header — Core Layout
+     ═══════════════════════════════════════ */
+
   .header {
+    --header-height: 3.5rem;
+    --icon-stroke-width: 1.5;
+
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    z-index: var(--z-header);
+    z-index: var(--z-sticky);
     height: var(--header-height);
-    background-color: var(--header-bg);
-    backdrop-filter: var(--header-blur);
-    -webkit-backdrop-filter: var(--header-blur);
-    border-bottom: 1px solid transparent;
-    transition: var(--transition-base);
+    background-color: var(--color-background);
+    border-bottom: 1px solid var(--color-border);
+    transition:
+      background-color var(--transition-base),
+      border-color var(--transition-base),
+      box-shadow var(--transition-base);
   }
 
+  /* Push body content below fixed header */
+  body {
+    padding-top: var(--header-height);
+  }
+
+  /* Scrolled state — added via JS */
   .header.is-scrolled {
-    border-bottom-color: var(--color-border);
-    box-shadow: var(--shadow-md);
+    background-color: rgba(10, 10, 10, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom-color: rgba(255, 255, 255, 0.06);
+    box-shadow: 0 1px 12px rgba(0, 0, 0, 0.4);
   }
 
   .header__inner {
@@ -97,47 +125,13 @@
     padding: 0 var(--page-margin);
   }
 
-  /* ── Hamburger ── */
-  .header__hamburger {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 5px;
-    width: 2.5rem;
-    height: 2.5rem;
-    padding: 0.5rem;
-    background: none;
-    border: none;
-    cursor: pointer;
-    z-index: calc(var(--z-drawer) + 1);
-  }
 
-  .hamburger-line {
-    display: block;
-    width: 100%;
-    height: 2px;
-    background-color: var(--color-foreground);
-    transition: var(--transition-base);
-    transform-origin: center;
-  }
+  /* ─── Logo ─── */
 
-  /* Hamburger → X animation */
-  .header__hamburger[aria-expanded="true"] .hamburger-line:nth-child(1) {
-    transform: translateY(7px) rotate(45deg);
-  }
-  .header__hamburger[aria-expanded="true"] .hamburger-line:nth-child(2) {
-    opacity: 0;
-    transform: scaleX(0);
-  }
-  .header__hamburger[aria-expanded="true"] .hamburger-line:nth-child(3) {
-    transform: translateY(-7px) rotate(-45deg);
-  }
-
-  /* ── Logo ── */
   .header__logo {
-    display: flex;
-    align-items: center;
     text-decoration: none;
+    color: var(--color-foreground);
+    flex-shrink: 0;
   }
 
   .header__logo:hover {
@@ -145,36 +139,35 @@
   }
 
   .header__logo-text {
-    font-family: var(--font-heading);
-    font-size: 1.35rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    color: var(--color-foreground);
+    font-family: var(--font-heading--family);
+    font-size: 1.4rem;
+    font-weight: var(--font-heading--weight);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
     line-height: 1;
+    white-space: nowrap;
   }
 
-  .header__logo-accent {
-    color: var(--color-accent);
-    margin-left: 0.15em;
-  }
 
-  /* ── Desktop Navigation ── */
+  /* ─── Desktop Navigation ─── */
+
   .header__nav {
     display: none;
     align-items: center;
-    gap: var(--space-xl);
+    gap: var(--space-lg);
   }
 
   .header__nav-link {
-    font-family: var(--font-heading);
-    font-size: 0.85rem;
+    font-family: var(--font-primary--family);
+    font-size: var(--text-sm);
     font-weight: 500;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--color-muted-light);
+    color: var(--color-muted);
     text-decoration: none;
     position: relative;
-    padding: 0.25rem 0;
+    padding: var(--space-xs) 0;
+    transition: color var(--transition-fast);
   }
 
   .header__nav-link::after {
@@ -183,143 +176,220 @@
     bottom: -2px;
     left: 0;
     width: 0;
-    height: 2px;
+    height: 1px;
     background-color: var(--color-accent);
-    transition: var(--transition-base);
+    transition: width var(--transition-base);
   }
 
-  .header__nav-link:hover {
+  .header__nav-link:hover,
+  .header__nav-link.is-active {
     color: var(--color-foreground);
   }
 
-  .header__nav-link:hover::after {
+  .header__nav-link:hover::after,
+  .header__nav-link.is-active::after {
     width: 100%;
   }
 
-  .header__nav-link--sale {
-    color: var(--color-accent);
-  }
 
-  .header__nav-link--sale:hover {
-    color: var(--color-accent-hover);
-  }
+  /* ─── Action Icons ─── */
 
-  /* ── Icons ── */
-  .header__icons {
+  .header__actions {
     display: flex;
     align-items: center;
     gap: var(--space-sm);
   }
 
-  .header__icon-btn {
+  .header__icon {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 2.25rem;
+    height: 2.25rem;
+    color: var(--color-foreground);
     background: none;
     border: none;
-    color: var(--color-foreground);
     cursor: pointer;
-    transition: var(--transition-fast);
+    transition: color var(--transition-fast);
     position: relative;
-    text-decoration: none;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
   }
 
-  .header__icon-btn:hover {
+  .header__icon:hover {
     color: var(--color-accent);
   }
 
-  .header__icon-btn svg {
+  .header__icon svg {
     width: 20px;
     height: 20px;
   }
 
-  /* Cart count badge */
+  /* Cart badge */
   .header__cart-count {
-
-  position: absolute;
-
-  top: 2px;
-
-  right: 2px;
-
-  min-width: 16px;
-
-  height: 16px;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  background-color: var(--color-accent);
-
-  color: var(--color-bg);
-
-  font-family: var(--font-body);
-
-  font-size: 0.6rem;
-
-  font-weight: 700;
-
-  border-radius: var(--radius-full);
-
-  line-height: 1;
-
-  padding: 0 4px;
-
-}
-
-.header__cart-count.is-hidden {
-
-  display: none;
-
-}
-
-  /* ── Body offset for fixed header ── */
-  body {
-    padding-top: var(--header-height);
+    position: absolute;
+    top: 2px;
+    right: 0;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    background-color: var(--color-accent);
+    color: var(--color-accent-fg);
+    font-family: var(--font-primary--family);
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 16px;
+    text-align: center;
+    border-radius: 8px;
   }
 
-  /* ── Desktop breakpoint ── */
-  @media (min-width: 768px) {
-    .header {
-      height: var(--header-height-desktop);
-    }
 
-    .header__hamburger {
-      display: none;
+  /* ─── Hamburger (animated) ─── */
+
+  .header__menu-toggle {
+    display: flex;
+  }
+
+  .header__hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 20px;
+    height: 20px;
+    gap: 4px;
+  }
+
+  .header__hamburger span {
+    display: block;
+    width: 18px;
+    height: 1.5px;
+    background-color: currentColor;
+    transition:
+      transform var(--transition-base),
+      opacity var(--transition-fast);
+    transform-origin: center;
+  }
+
+  /* Hamburger → X animation */
+  .header__menu-toggle[aria-expanded="true"] .header__hamburger span:nth-child(1) {
+    transform: translateY(5.5px) rotate(45deg);
+  }
+
+  .header__menu-toggle[aria-expanded="true"] .header__hamburger span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .header__menu-toggle[aria-expanded="true"] .header__hamburger span:nth-child(3) {
+    transform: translateY(-5.5px) rotate(-45deg);
+  }
+
+
+  /* ═══════════════════════════════════════
+     Responsive — Desktop (769px+)
+     ═══════════════════════════════════════ */
+
+  @media (min-width: 769px) {
+    .header {
+      --header-height: 4rem;
     }
 
     .header__nav {
       display: flex;
     }
 
-    .header__logo-text {
-      font-size: 1.5rem;
+    .header__menu-toggle {
+      display: none;
     }
 
-    body {
-      padding-top: var(--header-height-desktop);
+    .header__actions {
+      gap: var(--space-md);
+    }
+
+    .header__logo-text {
+      font-size: 1.5rem;
     }
   }
 {% endstylesheet %}
 
+{% javascript %}
+  /* ── Sticky header scroll effect ── */
+  (function() {
+    const header = document.getElementById('site-header');
+    if (!header) return;
+
+    let ticking = false;
+
+    function onScroll() {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          header.classList.toggle('is-scrolled', window.scrollY > 10);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  })();
+
+  /* ── Mobile menu toggle ── */
+  (function() {
+    const toggle  = document.getElementById('mobile-menu-toggle');
+    const menu    = document.getElementById('mobile-menu');
+    const overlay = document.getElementById('mobile-menu-overlay');
+    if (!toggle || !menu) return;
+
+    function openMenu() {
+      toggle.setAttribute('aria-expanded', 'true');
+      menu.classList.add('is-open');
+      menu.setAttribute('aria-hidden', 'false');
+      if (overlay) overlay.classList.add('is-active');
+      document.documentElement.style.overflow = 'hidden';
+    }
+
+    function closeMenu() {
+      toggle.setAttribute('aria-expanded', 'false');
+      menu.classList.remove('is-open');
+      menu.setAttribute('aria-hidden', 'true');
+      if (overlay) overlay.classList.remove('is-active');
+      document.documentElement.style.overflow = '';
+    }
+
+    toggle.addEventListener('click', () => {
+      const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+      isOpen ? closeMenu() : openMenu();
+    });
+
+    if (overlay) {
+      overlay.addEventListener('click', closeMenu);
+    }
+
+    /* Close on Escape */
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') {
+        closeMenu();
+        toggle.focus();
+      }
+    });
+  })();
+{% endjavascript %}
+
 {% schema %}
 {
-  "name": "Swamp Mode Header",
+  "name": "Header",
   "settings": [
     {
       "type": "link_list",
       "id": "menu",
-      "label": "t:labels.menu"
+      "label": "Menú principal",
+      "info": "Deja vacío para usar links placeholder de desarrollo."
     },
     {
       "type": "link_list",
       "id": "customer_account_menu",
-      "label": "t:labels.customer_account_menu",
+      "label": "Menú de cuenta",
       "default": "customer-account-main-menu"
     }
   ]
