@@ -1,37 +1,45 @@
 <!doctype html>
-<html lang="{{ request.locale.iso_code }}" data-theme="dark">
+<html lang="{{ request.locale.iso_code }}">
   <head>
-    {% # Inlined CSS Variables %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+    {% # Swamp Mode Design System — CSS Variables & Font Declarations %}
     {% render 'css-variables' %}
 
     {% comment %}
-      Google Fonts: Oswald (headings) + Inter (body)
-      Preconnect for faster loading, then load the font stylesheets.
-    {% endcomment %}
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    {% comment %}
-      Shopify font preloading (if a non-system font is selected in theme settings):
-      1. Preconnect to font CDN for faster connection
-      2. Preload only the critical font variant (base weight)
+      Font preloading:
+      1. Preconnect to Shopify font CDN
+      2. Preload the critical font variants (body + heading base weight)
       3. Additional variants load on-demand via @font-face
     {% endcomment %}
+    <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
+
     {% unless settings.type_primary_font.system? %}
-      <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
-      {% comment %} Preload the base font variant for initial page render {% endcomment %}
       {{ settings.type_primary_font | font_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
     {% endunless %}
 
-    {% # Load and preload the critical CSS %}
+    {% unless settings.type_heading_font.system? %}
+      {{ settings.type_heading_font | font_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
+    {% endunless %}
+
+    {% # Critical CSS — loaded and preloaded on every page %}
     {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
 
-    {% # Social, title, etc. %}
+    {% # SEO & Social Meta Tags %}
     {% render 'meta-tags' %}
 
-    {% comment %} Favicon — placeholder until brand asset is provided {% endcomment %}
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230A0A0A'/><text y='70' x='15' font-size='60' fill='%23BFFF00' font-family='sans-serif' font-weight='bold'>S</text></svg>">
+    {% comment %} Favicon — replace with Swamp Mode logo when available {% endcomment %}
+    {% if settings.favicon %}
+      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+    {% endif %}
+
+    <title>
+      {{ page_title }}
+      {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
+      {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+      {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+    </title>
 
     {{ content_for_header }}
   </head>
@@ -39,10 +47,26 @@
   <body>
     {% sections 'header-group' %}
 
-    <main id="main-content">
+    <main id="main-content" role="main">
       {{ content_for_layout }}
     </main>
 
     {% sections 'footer-group' %}
+
+    {% comment %} Scroll-triggered fade-in animation observer {% endcomment %}
+    <script>
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+      }
+    </script>
   </body>
 </html>

@@ -1,9 +1,9 @@
 [
   {
     "name": "theme_info",
-    "theme_name": "Skeleton",
-    "theme_version": "0.1.0",
-    "theme_author": "Shopify",
+    "theme_name": "Swamp Mode",
+    "theme_version": "1.0.0",
+    "theme_author": "Swamp Mode",
     "theme_documentation_url": "https://help.shopify.com/manual/online-store/themes",
     "theme_support_url": "https://support.shopify.com/"
   },
@@ -17,8 +17,14 @@
       {
         "type": "font_picker",
         "id": "type_primary_font",
-        "default": "work_sans_n4",
-        "label": "t:general.primary"
+        "default": "inter_n4",
+        "label": "Body font"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_heading_font",
+        "default": "bebas_neue_n4",
+        "label": "Heading font"
       }
     ]
   },
@@ -59,14 +65,38 @@
       {
         "type": "color",
         "id": "background_color",
-        "default": "#FFFFFF",
-        "label": "t:labels.background"
+        "default": "#0A0A0A",
+        "label": "Background"
+      },
+      {
+        "type": "color",
+        "id": "surface_color",
+        "default": "#151515",
+        "label": "Surface (cards, panels)"
       },
       {
         "type": "color",
         "id": "foreground_color",
-        "default": "#333333",
-        "label": "t:labels.foreground"
+        "default": "#F5F5F5",
+        "label": "Text"
+      },
+      {
+        "type": "color",
+        "id": "muted_color",
+        "default": "#A1A1A1",
+        "label": "Muted text"
+      },
+      {
+        "type": "color",
+        "id": "accent_color",
+        "default": "#BFFF00",
+        "label": "Accent (CTAs, highlights)"
+      },
+      {
+        "type": "color",
+        "id": "accent_secondary_color",
+        "default": "#8DAA17",
+        "label": "Accent secondary"
       },
       {
         "type": "range",
@@ -76,7 +106,7 @@
         "step": 1,
         "unit": "px",
         "label": "t:labels.input_corner_radius",
-        "default": 4
+        "default": 0
       }
     ]
   }
